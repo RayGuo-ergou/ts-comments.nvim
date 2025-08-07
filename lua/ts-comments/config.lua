@@ -3,7 +3,8 @@ local M = {}
 
 M._get_option = vim.filetype.get_option
 
----@alias TSCommentsSpec string|string[]|table<string,string|string[]>
+---@alias _TSCommentsSpec string|string[]|table<string,string|string[]>
+---@alias TSCommentsSpec _TSCommentsSpec|function():_TSCommentsSpec
 
 ---@class TSCommentsOptions
 ---@field lang table<string, TSCommentsSpec>
@@ -13,6 +14,10 @@ M.options = {
     axaml = "<!-- %s -->",
     bicep = "// %s",
     blueprint = "// %s",
+    blade = {
+      program = "// %s",
+      php_statement = "// %s",
+    },
     c = "// %s",
     c_sharp = "// %s",
     clojure = { ";; %s", "; %s" },
@@ -26,7 +31,13 @@ M.options = {
     graphql = "# %s",
     handlebars = "{{! %s }}",
     hcl = "# %s",
-    html = "<!-- %s -->",
+    html = function()
+      local ft = vim.bo.filetype
+      if ft == "blade" then
+        return "{{-- %s --}}"
+      end
+      return "<!-- %s -->"
+    end,
     hyprlang = "# %s",
     ini = "; %s",
     ipynb = "# %s",
@@ -67,7 +78,10 @@ M.options = {
     },
     twig = "{# %s #}",
     typescript = { "// %s", "/* %s */" }, -- langs can have multiple commentstrings
-    vue = "<!-- %s -->",
+    vue = {
+      "<!-- %s -->",
+      script_element = "// %s",
+    },
     xaml = "<!-- %s -->",
   },
 }

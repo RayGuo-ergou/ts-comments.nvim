@@ -75,6 +75,8 @@ function M.resolve(ft, opts)
       for _, v in pairs(a) do
         add(v)
       end
+    elseif type(a) == "function" then
+      add(a())
     end
   end
 
