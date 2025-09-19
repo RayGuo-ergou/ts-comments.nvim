@@ -15,6 +15,7 @@ M.options = {
     bicep = "// %s",
     blueprint = "// %s",
     blade = {
+      "{{-- %s --}}",
       program = "// %s",
       php_statement = "// %s",
     },
