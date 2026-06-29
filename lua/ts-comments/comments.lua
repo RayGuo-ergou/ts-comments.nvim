@@ -7,9 +7,34 @@ function M.norm(cs)
   return vim.trim(cs:gsub("%s*%%s%s*", " %%s "))
 end
 
+---@param op string|string[]
+local function compareOptions(op)
+  local df = vim.opt.comments:get()
+  local function to_list(v)
+    if type(v) == "string" then
+      return vim.split(v, ",")
+    elseif type(v) == "table" then
+      return vim.deepcopy(v)
+    end
+    return {}
+  end
+  local a, b = to_list(op), to_list(df)
+  if #a ~= #b then
+    return false
+  end
+  table.sort(a)
+  table.sort(b)
+  for i = 1, #a do
+    if a[i] ~= b[i] then
+      return false
+    end
+  end
+  return true
+end
+
 local function get_comments(ft)
   local cc = Config._get_option(ft, "comments")
-  if cc == vim.opt.comments._info.default then
+  if compareOptions(cc) then
     return {}
   end
   return vim.tbl_filter(
