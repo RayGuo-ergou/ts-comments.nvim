@@ -9,7 +9,7 @@ end
 
 ---@param op string|string[]
 local function compareOptions(op)
-  local df = vim.opt.comments:get()
+  local df = vim.opt.comments._info and vim.opt.comments._info.default or vim.opt.comments:get()
   local function to_list(v)
     if type(v) == "string" then
       return vim.split(v, ",")
